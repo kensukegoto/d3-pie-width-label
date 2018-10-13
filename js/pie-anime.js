@@ -5,7 +5,7 @@ $(function(){
     {idx:1,val:21,name:"oth"}
 ];
 
-  var color = d3.scaleOrdinal(["#ffd600", "rgba(255,255,255,0)"]);
+  var color = d3.scaleOrdinal(["#ffd600", "rgba(255,255,0,.5)"]);
 
   var id = "#box-pie-anime";
   
@@ -47,9 +47,9 @@ $(function(){
       .attr("fill",function(d){
         return color(d.data.idx);
       })
-      .attr("path",function(d){
+      .attr("opacity",function(d){
         // othだったら透明に（見せたくない）
-        return (d.data.name==="oth")?0:1;
+        return (d.data.name==="oth")?1:1;
       })
       .transition()
       .ease(d3.easeLinear)
