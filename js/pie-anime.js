@@ -7,7 +7,7 @@ $(function(){
 
   var color = d3.scaleOrdinal(["#ffd600", "rgba(255,255,255,0)"]);
 
-  var id = "#box-graph";
+  var id = "#box-pie-anime";
   
   var width = $(id).width(),
     height = width;
