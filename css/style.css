@@ -1,5 +1,5 @@
 main{
-  width: 960px;
+  width: 300px;
   margin: 0 auto;
 }
 article{
@@ -16,4 +16,11 @@ h1{
   background-color: #ccffff;
   padding: 10px;
   margin: 1em 0;
+}
+
+.label{
+  writing-mode:tb;
+  text-anchor: middle;
+  font-size: 36px;
+  font-weight: bold;
 }

@@ -1,14 +1,11 @@
 $(function(){
-  console.log("hello pie chart !!");
+
   var csvPath = "data/pie.csv";
   d3.csv(csvPath,function(d,idx,label){
     // label => ["name","seat","kanji"]
     d.seat = +d.seat;
     return d;
   },function(err,raw){
-    // label名
-    console.log(raw.columns);
-    console.log(raw);
 
     var data = {
       self:[]
@@ -39,49 +36,77 @@ $(function(){
       });
     
     // ドーナツではなくても innerRadius は必須(ないと表示がおかしくなる)
-    var path = d3.arc().outerRadius(radius-10).innerRadius(0);
+    var path = d3.arc().outerRadius(radius-10).innerRadius(radius/3);
     
     // パターンA
-    var arc = g.selectAll(".arc")
+    // var arc = g.selectAll(".arc")
+    //   .data(pie(data.self))
+    //   .enter()
+    //   .append("g")
+    //   .attr("class","arc");
+
+    //   arc.append("path") 
+    //   .attr("d",path)
+    //   .attr("fill",function(d,idx){
+    //     return color(idx);
+    //   });
+
+    // パターンB
+      var arc = g.selectAll(".arc")
       .data(pie(data.self))
       .enter()
-      .append("g")
-      .attr("class","arc");
-
-      arc.append("path") 
+      .append("path") 
       .attr("d",path)
       .attr("fill",function(d,idx){
         return color(idx);
       });
 
-    // パターンB
-    // var arc = g.selectAll(".arc")
-    // .data(pie(data.self))
-    // .enter()
-    // .append("path") 
-    // .attr("d",path)
-    // .attr("fill",function(d,idx){
-    //   return color(idx);
-    // });
-
     var label = d3.arc()
-      .outerRadius(radius-10).innerRadius(0);
+      .outerRadius(radius-10).innerRadius(radius/3);
 
-    arc.append("text")
-      .attr("opacity",0)
+    var labels = g.selectAll(".label")
+      .data(pie(data.self))
+      .enter()
+      .append("text")
+      .attr("class","label")
+      .attr("writing-mode","tb");
+  
+      
+    labels
+      .attr("opacity",function(d){
+
+        const outer = radius - 10;
+        const inner = radius / 3;
+        const diff = (outer - inner) / 2;
+        const r = inner + diff;
+
+        const start = {
+          x: r * Math.cos(d.startAngle),
+          y: r * Math.sin(d.startAngle)
+        }
+        const end = {
+          x: r * Math.cos(d.endAngle),
+          y: r * Math.sin(d.endAngle)
+        }
+        let distance = Math.pow(end.x - start.x,2) + Math.pow(end.y - start.y,2);
+      
+        distance = Math.sqrt(distance)
+        
+        console.log(distance)
+        return distance > 36 ? 1 : 0;
+      })
       .attr("transform",function(d){
-
-        return "translate("+ label.centroid(d) +")";
+        const [x,y] = label.centroid(d)
+        const rad = Math.atan2( y, x );
+        let angle = rad * ( 180 / Math.PI ) ;
+        
+        return `translate(${x},${y}) rotate(${angle + 90})`;
       })
       .text(function(d){
-        console.log(d.data.seat);
-        return d.data.seat;
+        console.log(d);
+        return d.data.kanji;
       })
-      .transition()
-      .ease(d3.easeLinear)
-      .delay(500)
-      .duration(1000)
-      .attr("opacity",1)
+
     
   })
 
