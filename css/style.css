@@ -24,3 +24,7 @@ h1{
   font-size: 36px;
   font-weight: bold;
 }
+
+.pad{
+  opacity: 0;
+}

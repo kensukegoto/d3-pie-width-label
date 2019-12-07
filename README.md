@@ -1,0 +1,2 @@
+- windows chromeで文字間が広くなる。
+  - おそらくフォントの問題。line-heightなど指定しても意味なし。
